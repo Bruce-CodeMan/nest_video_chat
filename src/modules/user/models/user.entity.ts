@@ -36,16 +36,10 @@ export class User {
   updated_at: Date;
 
   @Column()
-  access_token: string;
-
-  @Column()
   avatar: string;
 
   @Column()
   description: string;
-
-  @Column()
-  expired_at: Date;
 
   @Column()
   fcm_token: string;

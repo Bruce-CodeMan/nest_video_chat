@@ -8,6 +8,7 @@ import { config } from "dotenv";
 
 // Import the custom entities
 import { UserModule } from "@/modules/user/user.module";
+import { AuthModule } from '@/modules/auth/auth.module';
 import { connectionOptions } from '@/utils/orm.connection';
 
 const envFilePath = `.env.${process.env.NODE_ENV || `development`}`
@@ -16,11 +17,11 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath,
-      load: [() => config({path: ".env"})]
+      envFilePath
     }),
     TypeOrmModule.forRoot(connectionOptions),
-    UserModule
+    UserModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],

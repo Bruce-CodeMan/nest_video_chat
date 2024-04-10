@@ -1,56 +1,46 @@
-// Import the core libraries
 import * as fs from "fs";
-import * as path from "path";
+import * as path from "path"
 
-// Import the libraries from the external
 import * as dotenv from "dotenv"
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { DbEnum } from "@/enum/config.enum";
-import { DataSource, DataSourceOptions } from "typeorm";
 
-// Import the custom files
+function loadConfig(): Record<string, any> {
+  const basePath = process.cwd()
+  const defaultEnvPath = path.resolve(basePath, ".env")
+  const environment = process.env.NODE_ENV || `development`
+  const envFilePath = path.resolve(basePath, `.env.${environment}`)
 
+  let config = {}
 
-// Read the environment path
-function getEnv(envFilePath: string): Record<string, any> {
-  const envPath = path.resolve(process.cwd(), envFilePath)
-  if(fs.existsSync(envPath)) {
-    return dotenv.parse(fs.readFileSync(envPath))
+  if(fs.existsSync(defaultEnvPath)) {
+    Object.assign(config, dotenv.parse(fs.readFileSync(defaultEnvPath)))
   }
-  return {}
+  if(fs.existsSync(envFilePath)) {
+    Object.assign(config, dotenv.parse(fs.readFileSync(envFilePath)))
+  }
+
+  return config;
 }
 
-// Parse the boolean value
-function getBooleanValue(value: string): boolean {
-  return value == "true"
+function parsePort(value: string | undefined, defaultValue: number): number {
+  return value ? parseInt(value, 10) : defaultValue;
 }
 
-// Create the mysql connection
-function buildConnectionOptions() {
-
-  const defaultConfig = getEnv(".env")
-  const envConfig = getEnv(`.env.${process.env.NODE_ENV || `development`}`)
-  const config = {...defaultConfig, ...envConfig}
-
-  const dbPort = config[DbEnum.DB_PORT] ? parseInt(config[DbEnum.DB_PORT], 3306) : undefined;
-
-  return {
-    type: config[DbEnum.DB_TYPE],
-    host: config[DbEnum.DB_HOST],
-    port: dbPort,
-    username: config[DbEnum.DB_USERNAME],
-    password: config[DbEnum.DB_PASSWORD],
-    database: config[DbEnum.DB_DATABASE],
-    entities: [`${__dirname}/../modules/**/*.entity.{ts,js}`],
-    synchronize: getBooleanValue(config[DbEnum.DB_SYNC]),
-    logging: getBooleanValue(config[DbEnum.DB_LOGGING])
-  } as TypeOrmModuleOptions;
+function parseBoolean(value: string | undefined, defaultValue: boolean): boolean {
+  return value ? value === "true" : defaultValue;
 }
 
-export const connectionOptions = buildConnectionOptions();
+const config = loadConfig()
 
-export default new DataSource({
-  ...connectionOptions,
-  migrations: [`${process.cwd()}/src/migrations/*`],
-  subscribers: []
-} as DataSourceOptions);
+export const connectionOptions: TypeOrmModuleOptions = {
+  type: config[DbEnum.DB_TYPE],
+  host: config[DbEnum.DB_HOST],
+  port: parsePort(config[DbEnum.DB_PORT], 3306),
+  username: config[DbEnum.DB_USERNAME],
+  password: config[DbEnum.DB_PASSWORD],
+  database: config[DbEnum.DB_DATABASE],
+  entities: [`${__dirname}/../modules/**/*.entity.{ts,js}`],
+  synchronize: parseBoolean(config[DbEnum.DB_SYNC], false),
+  logging: parseBoolean(config[DbEnum.DB_LOGGING], false)
+}

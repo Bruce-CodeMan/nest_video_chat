@@ -20,13 +20,13 @@ export class User {
   @IsEmail()
   email: string;
 
-  @Column({ comment: 'validate the email date' })
+  @Column({ comment: 'validate the email date' ,default: () => 'CURRENT_TIMESTAMP'})
   email_verified_at: Date;
 
-  @Column({ comment: 'password for login' })
+  @Column({ comment: 'password for login', default: ""})
   password: string;
   
-  @Column()
+  @Column({default: ""})
   remember_token: string;
 
   @CreateDateColumn({ type: 'datetime' })
@@ -38,10 +38,10 @@ export class User {
   @Column()
   avatar: string;
 
-  @Column()
+  @Column({default: ""})
   description: string;
 
-  @Column()
+  @Column({default: ""})
   fcm_token: string;
 
   @Column({ comment: '1 is for online / 0 is for offline', default: 1 })
@@ -50,6 +50,6 @@ export class User {
   @Column()
   open_id: number;
 
-  @Column()
+  @Column({default: 1})
   type: number;
 }

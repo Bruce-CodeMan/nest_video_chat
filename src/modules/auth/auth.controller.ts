@@ -1,11 +1,21 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
+import { GoogleDto } from "./dto/google.dto";
+import { AuthService } from "./auth.service";
 
-@Controller('/auth')
+@Controller('auth')
 export class AuthController {
-  constructor(){}
+  constructor(
+    private readonly authService: AuthService
+  ){}
 
-  @Post("signIn")
-  async signIn(@Body() loginDto: any) {
-    
+  @Post("google")
+  @HttpCode(HttpStatus.OK)
+  async googleSignIn(@Body() body: GoogleDto) {
+    // Get the Google data info
+    const { access_token, refresh_token } = await this.authService.signInWithGoogle(body)
+    return {
+      access_token,
+      refresh_token
+    }
   }
 }

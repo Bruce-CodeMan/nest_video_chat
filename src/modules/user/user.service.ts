@@ -11,5 +11,18 @@ export class UserService {
     private readonly userRepository: Repository<User>
   ){}
 
-  
+  // find the user by openId
+  async findByOpenId(openId: number) {
+    return this.userRepository.findOne({
+      where: {
+        open_id: openId
+      }
+    })
+  }
+
+  // create the user
+  async create(user: Partial<User>){
+    const userEntity = await this.userRepository.create(user)
+    return this.userRepository.save(userEntity)
+  }
 }

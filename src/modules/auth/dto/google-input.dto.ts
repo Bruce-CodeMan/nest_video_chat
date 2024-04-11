@@ -2,7 +2,7 @@ import { IsString, IsNumber, IsNotEmpty, IsEmail } from "class-validator";
 import { Type } from "class-transformer";
 
 
-export class GoogleDto {
+export class GoogleInputDto {
 
   @Type(() => Number)
   @IsNumber()

@@ -3,7 +3,7 @@ import * as path from "path"
 
 import * as dotenv from "dotenv"
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { DbEnum } from "@/enum/config.enum";
+import { DbEnum } from "@/common/enum/config.enum";
 
 function loadConfig(): Record<string, any> {
   const basePath = process.cwd()

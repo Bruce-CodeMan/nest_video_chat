@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { GoogleDto } from "./dto/google.dto";
+import { GoogleInputDto } from "./dto/google-input.dto";
 import { UserService } from "../user/user.service";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import { JwtEnum } from "@/enum/config.enum";
+import { JwtEnum } from "@/common/enum/config.enum";
 
 @Injectable()
 export class AuthService {
@@ -15,7 +15,7 @@ export class AuthService {
   ){}
 
   // 使用google登录
-  async signInWithGoogle(googleDto: GoogleDto) {
+  async signInWithGoogle(googleDto: GoogleInputDto) {
     const { openId, email, name, avatar } = googleDto;
     let user = await this.userService.findByOpenId(openId)
     if(!user) {

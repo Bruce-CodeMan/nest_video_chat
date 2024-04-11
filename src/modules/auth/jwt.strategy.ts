@@ -1,4 +1,4 @@
-import { JwtEnum } from "@/enum/config.enum";
+import { JwtEnum } from "@/common/enum/config.enum";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";

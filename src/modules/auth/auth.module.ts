@@ -5,7 +5,7 @@ import { UserModule } from "../user/user.module";
 import { AuthService } from "./auth.service";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { JwtEnum } from "@/enum/config.enum";
+import { JwtEnum } from "@/common/enum/config.enum";
 import { JwtStrategy } from "./jwt.strategy";
 
 @Module({

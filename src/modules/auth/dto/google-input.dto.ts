@@ -1,13 +1,10 @@
-import { IsString, IsNumber, IsNotEmpty, IsEmail } from "class-validator";
-import { Type } from "class-transformer";
+import { IsString, IsNotEmpty, IsEmail } from "class-validator";
 
 
 export class GoogleInputDto {
 
-  @Type(() => Number)
-  @IsNumber()
-  @IsNotEmpty()
-  openId: number;
+  @IsString()
+  openId: string;
 
   @IsEmail()
   email: string;

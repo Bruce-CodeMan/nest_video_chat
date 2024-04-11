@@ -48,7 +48,7 @@ export class User {
   online: number;
 
   @Column()
-  open_id: number;
+  open_id: string;
 
   @Column({default: 1})
   type: number;

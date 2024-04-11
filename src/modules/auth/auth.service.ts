@@ -39,4 +39,9 @@ export class AuthService {
     })
     return {access_token, refresh_token}
   }
+
+  // 获取user信息
+  async getUserInfo(openId: string) {
+    return await this.userService.findByOpenId(openId);
+  }
 }

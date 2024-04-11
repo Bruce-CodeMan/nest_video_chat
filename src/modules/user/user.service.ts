@@ -12,7 +12,7 @@ export class UserService {
   ){}
 
   // find the user by openId
-  async findByOpenId(openId: number) {
+  async findByOpenId(openId: string) {
     return this.userRepository.findOne({
       where: {
         open_id: openId

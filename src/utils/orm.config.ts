@@ -1,27 +1,10 @@
-import * as fs from "fs";
-import * as path from "path"
-
-import * as dotenv from "dotenv"
+// import the core library
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
+
+// Import the custom files
 import { DbEnum } from "@/common/enum/config.enum";
+import { loadConfig } from "@/utils/config.loader";
 
-function loadConfig(): Record<string, any> {
-  const basePath = process.cwd()
-  const defaultEnvPath = path.resolve(basePath, ".env")
-  const environment = process.env.NODE_ENV || `development`
-  const envFilePath = path.resolve(basePath, `.env.${environment}`)
-
-  let config = {}
-
-  if(fs.existsSync(defaultEnvPath)) {
-    Object.assign(config, dotenv.parse(fs.readFileSync(defaultEnvPath)))
-  }
-  if(fs.existsSync(envFilePath)) {
-    Object.assign(config, dotenv.parse(fs.readFileSync(envFilePath)))
-  }
-
-  return config;
-}
 
 function parsePort(value: string | undefined, defaultValue: number): number {
   return value ? parseInt(value, 10) : defaultValue;

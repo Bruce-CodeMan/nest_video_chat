@@ -3,22 +3,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
 
-// Import the libraries from the external
-import { config } from "dotenv";
-
-// Import the custom entities
-import { UserModule } from "@/modules/user/user.module";
-import { AuthModule } from '@/modules/auth/auth.module';
-import { connectionOptions } from '@/utils/orm.connection';
-
-const envFilePath = `.env.${process.env.NODE_ENV || `development`}`
+// Import the custom modules
+import { UserModule, AuthModule } from "@/modules";
+// Import the custom configurations
+import { connectionOptions, configOptions } from '@/utils';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath
-    }),
+    ConfigModule.forRoot(configOptions),
     TypeOrmModule.forRoot(connectionOptions),
     UserModule,
     AuthModule

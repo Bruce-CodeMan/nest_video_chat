@@ -1,5 +1,7 @@
-import { Controller, Get, Param } from "@nestjs/common";
+import { Controller, Get, Query, Req, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
+import { AuthGuard } from "@nestjs/passport";
+import { Request } from "express";
 
 @Controller('user')
 export class UserController {
@@ -8,13 +10,15 @@ export class UserController {
   ) {}
 
   @Get()
-  async getAllUsers(@Param('id') id: string) {
-    const user = await this.userService.findById(id);
-    console.log("id: ", id)
+  @UseGuards(AuthGuard('jwt'))
+  async getAllUsers(
+    @Req() req: Request
+  ) {
+    const id = req.user?.userId
     const users = await this.userService.findAllUsersExcept(id)
-    console.log("users: ", users)
     return {
       code: 200,
+      
       data: users
     }
   }

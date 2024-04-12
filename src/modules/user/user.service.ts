@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
 import { User } from "@/modules/user/models/user.entity";
-import { Not, Repository } from "typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class UserService {
@@ -37,10 +37,15 @@ export class UserService {
 
   // Get the whole userInfo
   async findAllUsersExcept(id: string): Promise<User[]> {
-    console.log("🚀 ~ UserService ~ findAllUsersExcept ~ id:", id)
-    
-    return await this.userRepository.createQueryBuilder('user')
-      .where('user.id != :id', {id})
-      .getMany()
+    const query = this.userRepository.createQueryBuilder('user')
+      .select('user.id')
+      .addSelect('user.name')
+      .addSelect('user.avatar')
+      .addSelect('user.description')
+      .addSelect('user.online');
+    if(id) {
+      query.where('user.id != :id', {id});
+    }
+    return await query.getMany();
   }
 }

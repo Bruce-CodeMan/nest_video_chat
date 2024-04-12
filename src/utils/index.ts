@@ -1,2 +1,2 @@
 export * from "./config.option";
-export * from "./orm.config";
+export * from "./orm.option";

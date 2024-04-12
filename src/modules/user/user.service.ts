@@ -35,17 +35,15 @@ export class UserService {
     })
   }
 
-  // Get the whole userInfo
+  // Get the whole userInfo Except the user logged
   async findAllUsersExcept(id: string): Promise<User[]> {
-    const query = this.userRepository.createQueryBuilder('user')
+    return await this.userRepository.createQueryBuilder('user')
       .select('user.id')
       .addSelect('user.name')
       .addSelect('user.avatar')
       .addSelect('user.description')
-      .addSelect('user.online');
-    if(id) {
-      query.where('user.id != :id', {id});
-    }
-    return await query.getMany();
+      .addSelect('user.online')
+      .where('user.id != :id', {id})
+      .getMany()
   }
 }
